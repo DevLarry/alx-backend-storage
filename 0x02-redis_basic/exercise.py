@@ -18,6 +18,19 @@ class Cache:
         self._redis.set(key, data)
         return key
     
-    def get(self, key: str, fn: Callable):
+    def get(self, key: str, fn: Callable = None) -> Union[str, bytes, int, float]:
         """Redis basics"""
-        return fn(self._redis.get(key))
+        data = self._redis.get(key)
+        if data is None:
+            return None
+        if fn is not None:
+            data = fn(data)
+        return data
+    
+    def get_int(self, key: str):
+        """Redis oo"""
+        return self.get(key, int)
+
+    def get_str(self, key):
+        """All redis"""
+        return self.get(key, str)
