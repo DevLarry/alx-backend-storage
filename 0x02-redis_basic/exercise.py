@@ -3,7 +3,7 @@
 
 import redis
 import uuid
-from typing import Union
+from typing import Union, Callable
 
 class Cache:
     """Redis basics"""
@@ -17,3 +17,7 @@ class Cache:
         key = str(uuid.uuid4())
         self._redis.set(key, data)
         return key
+    
+    def get(self, key: str, fn: Callable):
+        """Redis basics"""
+        return fn(self._redis.get(key))
