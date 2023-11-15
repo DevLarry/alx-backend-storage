@@ -15,6 +15,19 @@ def count_calls(method: Callable) -> Callable:
         return method(self, *args, **kwargs)
     return wrapped
 
+
+def call_history(method: Callable) -> Callable:
+    """Call history"""
+    @functools.wraps(method)
+    def rep(self, *args, **kwargs):
+        """All internal"""
+        name = method.__qualname__
+        self._redit.rpush(f"{name}:inputs", str(args))
+        res = method(self, *args)
+        self._redit.rpush(f"{name}:outputs", res)
+        return res
+    return rep
+
 class Cache:
     """Redis basics"""
     def __init__(self):
