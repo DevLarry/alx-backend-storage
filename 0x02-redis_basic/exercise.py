@@ -30,7 +30,7 @@ def replay(method: Callable):
     inputs = red.lrange("{}:inputs".format(cache.store.__qualname__), 0, -1)
     outputs = red.lrange("{}:outputs".format(cache.store.__qualname__), 0, -1)
     count = len(inputs)
-    print(f"{name} was called {count} time{'s' if count != 1 else ''}:")
+    print(f"{name} was called {count} times:")
     for i in range(count):
         inp = inputs[i].decode()
         outp = outputs[i].decode()
