@@ -22,9 +22,9 @@ def call_history(method: Callable) -> Callable:
     def rep(self, *args, **kwargs):
         """All internal"""
         name = method.__qualname__
-        self._redit.rpush(f"{name}:inputs", str(args))
+        self._redis.rpush(f"{name}:inputs", str(args))
         res = method(self, *args)
-        self._redit.rpush(f"{name}:outputs", res)
+        self._redis.rpush(f"{name}:outputs", str(res))
         return res
     return rep
 
@@ -59,3 +59,22 @@ class Cache:
     def get_str(self, key):
         """All redis"""
         return self.get(key, str)
+
+
+if __name__ == "__main__":
+    Cache = __import__('exercise').Cache
+
+    cache = Cache()
+
+    s1 = cache.store("first")
+    print(s1)
+    s2 = cache.store("secont")
+    print(s2)
+    s3 = cache.store("third")
+    print(s3)
+
+    inputs = cache._redis.lrange("{}:inputs".format(cache.store.__qualname__), 0, -1)
+    outputs = cache._redis.lrange("{}:outputs".format(cache.store.__qualname__), 0, -1)
+
+    print("inputs: {}".format(inputs))
+    print("outputs: {}".format(outputs))
