@@ -17,7 +17,7 @@ def count_calls(method: Callable) -> Callable:
     return wrapped
 
 
-def replay(method: Callable):
+def replay(method: Callable) -> None:
     """List the call history of a function"""
     if method is None or not hasattr(method, '__self__'):
         return
@@ -29,11 +29,15 @@ def replay(method: Callable):
     # red.flushdb()
     inputs = red.lrange("{}:inputs".format(cache.store.__qualname__), 0, -1)
     outputs = red.lrange("{}:outputs".format(cache.store.__qualname__), 0, -1)
-    count = len(inputs)
+    # print(inputs is None)
+    if inputs is not None or outputs is not None:
+        count = len(inputs)
+    else:
+        count = 0
     print(f"{name} was called {count} times:")
     for i in range(count):
         inp = inputs[i].decode()
-        outp = outputs[i].decode()
+        outp = outputs[i].decode("utf-8")
         print(f"{name}(*{inp}) -> {str(outp)}")
 
 
