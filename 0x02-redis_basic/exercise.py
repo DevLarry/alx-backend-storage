@@ -38,7 +38,7 @@ def replay(method: Callable) -> None:
     for i in range(count):
         inp = inputs[i].decode()
         outp = outputs[i].decode("utf-8")
-        print(f"{name}(*{inp}) -> {str(outp)}")
+        print(f"{name}(*{inp}) -> {outp}")
 
 
 def call_history(method: Callable) -> Callable:
@@ -94,7 +94,7 @@ class Cache:
 if __name__ == "__main__":
     cache = Cache()
 
-    # # cache = Cache()
+    # cache = Cache()
     cache.store("foo")
     cache.store("bar")
     cache.store(42)
